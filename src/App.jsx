@@ -34,7 +34,6 @@ function App() {
         <Sidebar />
         <Outlet />
       </div>
-      <button>logout</button>
     </div>
   );
 }

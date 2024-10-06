@@ -1,6 +1,7 @@
 // components/Products.jsx
 import React, { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
+import { FaSpinner } from "react-icons/fa"; // Импортируем иконку загрузки
 
 const Products = () => {
   const [data, setData] = useState([]);
@@ -47,7 +48,13 @@ const Products = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
+  
+    // Проверка, что discount_price меньше чем price
+    if (formData.discount_price >= formData.price) {
+      alert('Цена со скидкой должна быть меньше первоначальной цены.');
+      return; // Остановить отправку формы, если проверка не пройдена
+    }
+  
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
       if (key === 'images') {
@@ -59,22 +66,22 @@ const Products = () => {
         formDataToSend.append(key, formData[key]);
       }
     });
-
+  
     try {
       const response = await fetch('http://localhost:5000/api/v1/card/create', {
         method: 'POST',
         body: formDataToSend,
       });
-
+  
       if (!response.ok) {
         const errorResponse = await response.json();
         console.error('Error response:', errorResponse);
         throw new Error(`Error adding product: ${response.statusText}`);
       }
-
+  
       const result = await response.json();
       const newProduct = result.product;
-
+  
       setData((prevData) => [...prevData, newProduct]);
       document.getElementById('my_modal_3').close();
       // Reset form data
@@ -97,6 +104,7 @@ const Products = () => {
       console.error('Error adding product:', error);
     }
   };
+  
 
   const handleDelete = async (id) => {
     try {
@@ -134,7 +142,8 @@ const Products = () => {
   }, []);
 
   if (loading) {
-    return <div className="text-center text-gray-600">Loading...</div>;
+    return <div className="text-center text-gray-600"> 
+                               <FaSpinner className="animate-spin text-5xl text-gray-50" /> {/* Иконка загрузки */}</div>;
   }
 
   return (

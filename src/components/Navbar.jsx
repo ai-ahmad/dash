@@ -8,7 +8,7 @@ const Navbar = ({ toggleTheme, theme }) => {
     return (
         <div className="navbar bg-base-300 shadow-md px-4 py-2">
             <div className="flex-1 flex items-center">
-                <a className="btn btn-ghost text-xl font-bold text-white hover:text-blue-300 transition duration-300">oilTrade.uz</a>
+                <a className="btn btn-ghost text-xl font-bold text-white hover:text-blue-300 transition duration-300">oilDrive.uz</a>
                 <img 
                     src="https://oiltrade.uz/templates/oiltrade/images/logo1.png" 
                     alt="Логотип oilTrade" 
