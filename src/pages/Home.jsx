@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   Area,
 } from "recharts";
-import { FaBox, FaBullhorn, FaClipboardList, FaSpinner } from "react-icons/fa"; // Импортируем иконку загрузки
+import { FaBox, FaBullhorn, FaClipboardList, FaSpinner } from "react-icons/fa";
 
 const Home = () => {
   const [applications, setApplications] = useState([]);
@@ -18,9 +18,8 @@ const Home = () => {
   const [recentApplications, setRecentApplications] = useState([]);
   const [advertising, setAdvertising] = useState([]);
   const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true); // Стейт загрузки
+  const [loading, setLoading] = useState(true);
 
-  // Запросы данных
   const requestApplications = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/v1/zayavka/");
@@ -34,7 +33,7 @@ const Home = () => {
     } catch (e) {
       console.log("ERROR: ", e);
     } finally {
-      setLoading(false); // Устанавливаем загрузку в false после получения данных
+      setLoading(false);
     }
   };
 
@@ -96,12 +95,12 @@ const Home = () => {
     <div className="w-10/12 p-5">
       {loading ? (
         <div className="flex justify-center items-center h-full">
-          <FaSpinner className="animate-spin text-3xl text-gray-50 w-[50px] h-[50px]" /> {/* Иконка загрузки */}
+          <FaSpinner className="animate-spin text-3xl text-gray-50 w-[50px] h-[50px]" />
         </div>
       ) : (
         <>
           <div className="p-5 w-full flex items-center justify-between flex-wrap gap-4">
-            {/* Продукты */}
+
             <div className="p-4 rounded-2xl bg-gradient-to-r from-red-500 to-pink-600 shadow-lg flex-1 w-1/4 text-right text-white">
               <div className="flex justify-between items-center">
                 <FaBox size={30} />
@@ -112,7 +111,6 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Новости */}
             <div className="p-4 rounded-2xl bg-gradient-to-r from-red-500 to-pink-600 shadow-lg flex-1 w-1/4 text-right text-white">
               <div className="flex justify-between items-center">
                 <FaBox size={30} />
@@ -123,7 +121,6 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Заявки */}
             <div className="p-4 rounded-2xl bg-gradient-to-r from-green-500 to-teal-600 shadow-lg flex-1 w-1/4 text-right text-white">
               <div className="flex justify-between items-center">
                 <FaClipboardList size={30} />
@@ -134,7 +131,6 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Реклама */}
             <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg flex-1 w-1/4 text-right text-white">
               <div className="flex justify-between items-center">
                 <FaBullhorn size={30} />
@@ -146,7 +142,6 @@ const Home = () => {
             </div>
           </div>
 
-          {/* График для заявок */}
           <div className="p-5 mt-10 bg-base-200 rounded-lg shadow-lg">
             <h2 className="text-xl font-bold mb-4">Applications Overview</h2>
             <ResponsiveContainer width="100%" height={300}>
@@ -169,7 +164,7 @@ const Home = () => {
             <h2 className="text-xl font-bold mb-4">Recent Applications</h2>
             <ul>
               {recentApplications.map((app) => (
-                <li key={app._id} className="p-2 border-b border-gray-200 flex justify-between">
+                <li key={app._id} className="p-2 border-b border-gray-200 flex justify-between text-gray-800 dark:text-gray-200">
                   <span>Application #{app.id}</span>
                   <span>Total: ${app.totalAmount}</span>
                   <span>{app.date}</span>

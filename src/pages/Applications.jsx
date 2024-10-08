@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaEnvelope, FaPhone, FaTrash, FaSpinner } from 'react-icons/fa'; // Импортируем иконку загрузки
+import { FaEnvelope, FaPhone, FaTrash, FaSpinner } from 'react-icons/fa'; 
 
 const Applications = () => {
     const [applications, setApplications] = useState([]);
-    const [loading, setLoading] = useState(true); // Состояние загрузки
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         const fetchApplications = async () => {
@@ -20,7 +20,7 @@ const Applications = () => {
                     setApplications(JSON.parse(savedApplications));
                 }
             } finally {
-                setLoading(false); // Завершаем загрузку
+                setLoading(false); 
             }
         };
 
@@ -42,7 +42,7 @@ const Applications = () => {
             <h2 className="text-4xl font-bold text-center mb-8 text-gray-100">Список заявок</h2>
             {loading ? (
                 <div className="flex justify-center items-center">
-                    <FaSpinner className="animate-spin text-6xl text-gray-100" /> {/* Индикатор загрузки */}
+                    <FaSpinner className="animate-spin text-6xl text-gray-100" /> 
                 </div>
             ) : (
                 <>

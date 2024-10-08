@@ -15,6 +15,7 @@ import store, { persistor } from "./redux/store";
 import Applications from "./pages/Applications";
 import News from "./pages/News";
 import Advertising from "./pages/Advertising";
+import Otziv from "./pages/Otziv";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,13 @@ const router = createBrowserRouter([
         element: 
         <PrivateRoute >
         <Home />
+        </PrivateRoute>,
+      },
+      {
+        path: "otziv", 
+        element: 
+        <PrivateRoute >
+        <Otziv />
         </PrivateRoute>,
       },
       {

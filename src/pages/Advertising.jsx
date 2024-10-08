@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaPlus, FaTrash } from 'react-icons/fa';
-import { FaSpinner } from "react-icons/fa"; // Импортируем иконку загрузки
+import { FaSpinner } from "react-icons/fa"; 
 
 const Advertising = () => {
     const [data, setData] = useState([]);
@@ -131,7 +131,7 @@ const Advertising = () => {
                     </table>
                     {loading && (
                         <div className="flex justify-center mt-5 ">
-                            <FaSpinner className="animate-spin text-5xl text-gray-50" /> {/* Иконка загрузки */}
+                            <FaSpinner className="animate-spin text-5xl text-gray-50" /> 
                         </div>
                     )}
                 </div>

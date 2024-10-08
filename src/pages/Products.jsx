@@ -1,7 +1,7 @@
-// components/Products.jsx
+
 import React, { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
-import { FaSpinner } from "react-icons/fa"; // Импортируем иконку загрузки
+import { FaSpinner } from "react-icons/fa"; 
 
 const Products = () => {
   const [data, setData] = useState([]);
@@ -10,7 +10,7 @@ const Products = () => {
   // Initial form data with all fields
   const [formData, setFormData] = useState({
     name: '',
-    images: [], // Changed from 'image' to 'images' and initialized as an array
+    images: [], 
     description: '',
     price: '',
     category: '',
@@ -28,7 +28,6 @@ const Products = () => {
     const { name, value, files, type, checked } = e.target;
 
     if (type === 'file') {
-      // Handle multiple file uploads
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: files,
@@ -52,7 +51,7 @@ const Products = () => {
     // Проверка, что discount_price меньше чем price
     if (formData.discount_price >= formData.price) {
       alert('Цена со скидкой должна быть меньше первоначальной цены.');
-      return; // Остановить отправку формы, если проверка не пройдена
+      return; 
     }
   
     const formDataToSend = new FormData();
@@ -143,7 +142,7 @@ const Products = () => {
 
   if (loading) {
     return <div className="text-center text-gray-600"> 
-                               <FaSpinner className="animate-spin text-5xl text-gray-50" /> {/* Иконка загрузки */}</div>;
+              <FaSpinner className="animate-spin text-5xl text-gray-50" /> </div>;
   }
 
   return (
@@ -249,7 +248,7 @@ const Products = () => {
                 name="images" 
                 onChange={handleFormChange} 
                 className="file-input w-full mt-1 p-2 bg-gray-700 rounded-md text-white" 
-                multiple // Allow multiple file selection
+                multiple 
                 required 
               />
             </label>
@@ -314,7 +313,6 @@ const Products = () => {
               />
             </label>
 
-            {/* Add any other required fields here */}
 
             <button type="submit" className="btn bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg">
               Add Product

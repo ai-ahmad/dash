@@ -4,7 +4,7 @@ const Create = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState(''); // Новая переменная состояния для роли
+  const [role, setRole] = useState(''); 
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -12,13 +12,13 @@ const Create = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
-    setUsername('');  // Очистка полей после закрытия
+    setUsername(''); 
     setPassword('');
-    setRole(''); // Очистка роли
+    setRole(''); 
   };
 
   const handleCreate = async () => {
-    const partnerData = { username, password, role }; // Теперь мы включаем role
+    const partnerData = { username, password, role };
 
     try {
       const response = await fetch('http://localhost:5000/api/v1/admin/create-partner', {
@@ -39,7 +39,7 @@ const Create = () => {
       }
 
       console.log('Партнер успешно добавлен:', result);
-      closeModal(); // Закрываем модал после успешного создания
+      closeModal(); 
     } catch (error) {
       console.error('Ошибка:', error);
     }

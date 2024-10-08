@@ -8,7 +8,7 @@ const Logout = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    closeModal(); // Закрываем модал после выхода
+    closeModal(); 
   };
 
   const openModal = () => {

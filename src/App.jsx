@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import Products from './pages/Products';
 import Home from './pages/Home';
@@ -10,13 +10,19 @@ function App() {
   const store = useSelector((store) => store);
   console.log(store);
 
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'dark';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   const appStyle = {
     background: theme === 'light' 
-      ? 'linear-gradient(to bottom, #b3e0ff, #e6f7ff)' 
-      : 'linear-gradient(to bottom, #003366, #0066cc)', 
-    color: theme === 'light' ? '#333' : '#f0f0f0',
+      ? 'linear-gradient(to bottom, #a8d8ea, #ffffff)'  
+      : 'linear-gradient(to bottom, #1e3c72, #2a69ac)', 
+    color: theme === 'light' ? '#2c3e50' : '#ecf0f1', 
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
@@ -29,10 +35,10 @@ function App() {
 
   return (
     <div style={appStyle}>
-      <Navbar toggleTheme={toggleTheme} theme={theme} /> {/* Передаем пропсы в Navbar */}
+      <Navbar toggleTheme={toggleTheme} theme={theme} />
       <div className="flex">
-        <Sidebar />
-        <Outlet />
+        <Sidebar theme={theme} />
+        <Outlet context={{ theme }} /> 
       </div>
     </div>
   );

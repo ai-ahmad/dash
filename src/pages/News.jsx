@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FaSpinner } from "react-icons/fa";
+import { useOutletContext } from 'react-router-dom'; 
 
 const News = () => {
+  const { theme } = useOutletContext(); 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -12,15 +14,11 @@ const News = () => {
     images: [],
   });
 
-  // Запрос данных новостей
   const dataRequest = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/v1/news/');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+      if (!response.ok) throw new Error('Network response was not ok');
       const news = await response.json();
-      console.log('Fetched news data:', news); // Логирование данных
       setData(news);
     } catch (error) {
       console.error('Error fetching news:', error);
@@ -33,7 +31,6 @@ const News = () => {
     dataRequest();
   }, []);
 
-  // Обработка изменения формы
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -42,7 +39,6 @@ const News = () => {
     }));
   };
 
-  // Обработка изменения файлов
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setFormData((prevFormData) => ({
@@ -51,7 +47,6 @@ const News = () => {
     }));
   };
 
-  // Обработка отправки формы
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -69,11 +64,9 @@ const News = () => {
         method: 'POST',
         body: newFormData,
       });
-      if (!response.ok) {
-        throw new Error('Error adding news');
-      }
+      if (!response.ok) throw new Error('Error adding news');
       const newNews = await response.json();
-      setData((prevData) => [...prevData, newNews.news]); // Добавляем новые данные
+      setData((prevData) => [...prevData, newNews.news]);
 
       document.getElementById('my_modal_news').close();
       setFormData({
@@ -91,9 +84,7 @@ const News = () => {
     }
   };
 
-  // Обработка удаления новости
   const handleDelete = async (id) => {
-    console.log('Deleting news with ID:', id);
     try {
       const response = await fetch(`http://localhost:5000/api/v1/news/${id}`, {
         method: 'DELETE',
@@ -104,15 +95,29 @@ const News = () => {
       } else {
         const errorData = await response.json();
         alert(`Failed to delete news: ${errorData.message}`);
-        console.error('Error response:', errorData);
       }
     } catch (error) {
       console.error('Error deleting news:', error);
     }
   };
 
+  const newsStyle = {
+    color: theme === 'light' ? '#000000' : '#ffffff',
+    transition: 'color 0.5s ease',
+    padding: '3rem',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '90%', 
+    gap: '1rem',
+  };
+
+  const modalStyle = {
+    background: theme === 'light' ? '#f9f9f9' : '#333333',
+    color: theme === 'light' ? '#000000' : '#ffffff',
+  };
+
   return (
-    <div className="p-3 flex flex-col w-10/12 gap-5">
+    <div style={newsStyle}>
       <div className="bg-base-300 p-5 w-full flex justify-between items-center rounded-2xl">
         <h1 className="text-3xl font-bold text-primary">News</h1>
         <button className="btn btn-primary" onClick={() => document.getElementById('my_modal_news').showModal()}>
@@ -120,7 +125,7 @@ const News = () => {
         </button>
       </div>
 
-      <dialog id="my_modal_news" className="modal">
+      <dialog id="my_modal_news" className="modal" style={modalStyle}>
         <div className="modal-box">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">X</button>
@@ -140,11 +145,11 @@ const News = () => {
             </label>
             <label className="input input-bordered flex items-center gap-2 mt-5">
               Description 1
-              <input name="description1" value={formData.description1} onChange={handleFormChange} className="grow" placeholder="Description 1"></input>
+              <input name="description1" value={formData.description1} onChange={handleFormChange} className="grow" placeholder="Description 1" />
             </label>
             <label className="input input-bordered flex items-center gap-2 mt-5">
               Description 2
-              <input name="description2" value={formData.description2} onChange={handleFormChange} className="grow" placeholder="Description 2"></input>
+              <input name="description2" value={formData.description2} onChange={handleFormChange} className="grow" placeholder="Description 2" />
             </label>
             <button type="submit" className="btn mt-5">Add News</button>
           </form>
@@ -167,7 +172,9 @@ const News = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="7" className="text-center flex justify-center items-center">  <FaSpinner className="animate-spin text-5xl text-gray-50" /> {/* Иконка загрузки */}</td>
+                  <td colSpan="7" className="text-center flex justify-center items-center">
+                    <FaSpinner className="animate-spin text-5xl text-gray-50" />
+                  </td>
                 </tr>
               ) : (
                 Array.isArray(data) && data.length > 0 ? (

@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { login } from '../redux/authSclice';
-import { FaUser, FaLock } from 'react-icons/fa'; // Импорт иконок
-import { Rings } from 'react-loader-spinner'; // Импорт индикатора загрузки
+import { FaUser, FaLock } from 'react-icons/fa'; 
+import { Rings } from 'react-loader-spinner'; 
 
 const Login = () => {
   const store = useSelector((store) => store);
@@ -51,7 +51,7 @@ const Login = () => {
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Вход в панель администратора</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        {/* Индикатор загрузки */}
+        
         {loading && (
           <div className="flex justify-center mb-4">
             <Rings color="#00BFFF" height={50} width={50} />
