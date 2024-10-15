@@ -13,7 +13,7 @@ const Otziv = () => {
 
     const fetchOtzivs = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/v1/otziv'); // Обновите URL для получения данных
+            const response = await fetch('http://localhost:5000/api/v1/otziv');
             const otzivs = await response.json();
             setData(otzivs);
         } catch (error) {
@@ -53,8 +53,8 @@ const Otziv = () => {
             
             const newOtziv = await response.json();
             setData((prevData) => [...prevData, newOtziv.data]);
-            setFormData({ name: '', date: '', rating: '', comment: '' }); // Очистка формы
-            document.getElementById('my_modal_otziv').close(); // Закрытие модального окна
+            setFormData({ name: '', date: '', rating: '', comment: '' });
+            document.getElementById('my_modal_otziv').close();
         } catch (error) {
             console.error('Error adding otziv:', error);
         }
@@ -67,7 +67,7 @@ const Otziv = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id }), // Передаем ID в теле запроса
+                body: JSON.stringify({ id }),
             });
             if (!response.ok) {
                 throw new Error('Error deleting otziv');
@@ -77,6 +77,14 @@ const Otziv = () => {
         } catch (error) {
             console.error('Error deleting otziv:', error);
         }
+    };
+
+    
+
+    const truncateComment = (comment) => {
+        if (!comment) return ''; // Return empty string if comment is undefined or null
+        const words = comment.split(' ');
+        return words.length > 30 ? words.slice(0, 30).join(' ') + '...' : comment;
     };
 
     return (
@@ -130,14 +138,14 @@ const Otziv = () => {
                         </thead>
                         <tbody>
                             {data.map((otziv) => (
-                                <tr key={otziv._id}>
+                                <tr key={otziv._id} className='text-white'>
                                     <td>{otziv._id}</td>
                                     <td>{otziv.name}</td>
                                     <td>{new Date(otziv.date).toLocaleDateString()}</td>
                                     <td>{otziv.rating}</td>
-                                    <td>{otziv.comment}</td>
+                                    <td>{truncateComment(otziv.comment)}</td>
                                     <td>
-                                        <button className="btn" onClick={() => handleDelete(otziv._id)}>
+                                        <button className="btn hover:bg-red-600 transition duration-200" onClick={() => handleDelete(otziv._id)}>
                                             <FaTrash className="mr-2" /> Удалить
                                         </button>
                                     </td>

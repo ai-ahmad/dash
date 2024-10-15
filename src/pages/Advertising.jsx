@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { FaPlus, FaTrash } from 'react-icons/fa';
-import { FaSpinner } from "react-icons/fa"; 
+import { FaPlus, FaTrash, FaEdit } from 'react-icons/fa';
+import { FaSpinner } from "react-icons/fa";
 
 const Advertising = () => {
     const [data, setData] = useState([]);
@@ -9,6 +9,8 @@ const Advertising = () => {
         image: null,
         description: '',
     });
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentEditId, setCurrentEditId] = useState(null);
 
     const dataRequest = async () => {
         try {
@@ -42,21 +44,58 @@ const Advertising = () => {
         formDataToSend.append('description', formData.description);
     
         try {
-            const response = await fetch('http://localhost:5000/api/v1/banner', {
-                method: 'POST',
-                body: formDataToSend,
-            });
-            
-            if (!response.ok) {
-                throw new Error('Error adding advertisement');
+            if (isEditing && currentEditId) {
+                // Update existing advertisement
+                const response = await fetch(`http://localhost:5000/api/v1/banner/${currentEditId}`, {
+                    method: 'PUT',
+                    body: formDataToSend,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error updating advertisement');
+                }
+
+                const updatedAd = await response.json();
+                setData((prevData) => prevData.map(ad => ad._id === currentEditId ? updatedAd : ad));
+            } else {
+                // Create new advertisement
+                const response = await fetch('http://localhost:5000/api/v1/banner', {
+                    method: 'POST',
+                    body: formDataToSend,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error adding advertisement');
+                }
+
+                const newAd = await response.json();
+                setData((prevData) => [...prevData, newAd]);
             }
-            
-            const newAd = await response.json();
-            setData((prevData) => [...prevData, newAd]);
+
             document.getElementById('my_modal_advertising').close();
+            resetForm();
         } catch (error) {
-            console.error('Error adding advertisement:', error);
+            console.error('Error submitting advertisement:', error);
         }
+    };
+
+    const resetForm = () => {
+        setFormData({
+            image: null,
+            description: '',
+        });
+        setIsEditing(false);
+        setCurrentEditId(null);
+    };
+
+    const handleEdit = (ad) => {
+        setIsEditing(true);
+        setCurrentEditId(ad._id);
+        setFormData({
+            image: null,
+            description: ad.description,
+        });
+        document.getElementById('my_modal_advertising').showModal();
     };
 
     const handleDelete = async (id) => {
@@ -73,12 +112,24 @@ const Advertising = () => {
         }
     };
 
+    const truncateDescription = (description) => {
+        if (!description) return '';
+        const words = description.split(' ');
+        return words.length > 30 ? words.slice(0, 30).join(' ') + '...' : description;
+    };
+
     return (
         <div className="p-5 flex flex-col w-10/12 gap-5">
             <div className="bg-base-200 p-5 w-full flex justify-between items-center rounded-2xl">
-                <h1 className="text-2xl font-bold text-primary">Advertising</h1>
-                <button className="btn btn-primary flex items-center" onClick={() => document.getElementById('my_modal_advertising').showModal()}>
-                    <FaPlus className="mr-2" /> Добавить
+                <h1 className="text-2xl font-bold text-primary">Баннер Реклама</h1>
+                <button
+                    className="btn btn-primary flex items-center"
+                    onClick={() => {
+                        resetForm();
+                        document.getElementById('my_modal_advertising').showModal();
+                    }}
+                >
+                    <FaPlus className="mr-2" /> Add
                 </button>
             </div>
 
@@ -89,39 +140,57 @@ const Advertising = () => {
                     </form>
                     <form onSubmit={handleFormSubmit}>
                         <label className="input input-bordered flex items-center gap-2 mt-10">
-                            Image
+                        изображение
                             <input type="file" name="image" onChange={handleFormChange} className="grow" />
                         </label>
-                        <label className="input input-bordered flex items-center gap-2 mt-5">
-                            Description
-                            <input type="text" name="description" value={formData.description} onChange={handleFormChange} className="grow" placeholder="Description" />
+                        <label className="whitespace-normal break-words input input-bordered flex items-center gap-2 mt-5">
+                        Описание
+                            <input
+                                type="text"
+                                name="description"
+                                value={formData.description}
+                                onChange={handleFormChange}
+                                className="grow whitespace-normal break-words"
+                                placeholder="Description"
+                            />
                         </label>
-                        <button type="submit" className="btn mt-5">Add Advertising</button>
+                        <button type="submit" className="btn mt-5">
+                            {isEditing ? 'Update Advertising' : 'Add Advertising'}
+                        </button>
                     </form>
                 </div>
             </dialog>
 
-            <div className='p-5 w-full flex justify-between items-center bg-base-200 rounded-3xl'>
+            <div className="p-5 w-full flex justify-between items-center bg-base-200 rounded-3xl">
                 <div className="overflow-x-auto w-full">
                     <table className="table w-full">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Image</th>
-                                <th>Description</th>
+                                <th>Изображение</th>
+                                <th>Описание</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.map((ad) => (
-                                <tr key={ad._id}>
+                                <tr key={ad._id} className='text-white'>
                                     <td>{ad._id}</td>
                                     <td>
                                         <img src={`http://localhost:5000${ad.image_url}`} alt="Ad" style={{ width: '100px', height: 'auto' }} />
                                     </td>
-                                    <td>{ad.description}</td>
+                                    <td>{truncateDescription(ad.description)}</td>
                                     <td>
-                                        <button className="btn" onClick={() => handleDelete(ad._id)}>
+                                        <button
+                                            className="btn hover:bg-yellow-500 transition duration-200"
+                                            onClick={() => handleEdit(ad)}
+                                        >
+                                            <FaEdit className="mr-2" /> изменить 
+                                        </button>
+                                        <button
+                                            className="btn hover:bg-yellow-500 transition duration-200 ml-2"
+                                            onClick={() => handleDelete(ad._id)}
+                                        >
                                             <FaTrash className="mr-2" /> Удалить
                                         </button>
                                     </td>
@@ -130,8 +199,8 @@ const Advertising = () => {
                         </tbody>
                     </table>
                     {loading && (
-                        <div className="flex justify-center mt-5 ">
-                            <FaSpinner className="animate-spin text-5xl text-gray-50" /> 
+                        <div className="flex justify-center mt-5">
+                            <FaSpinner className="animate-spin text-5xl text-gray-50" />
                         </div>
                     )}
                 </div>

@@ -23,6 +23,7 @@
     "recharts": "^2.12.7",
     "redux-persist": "^6.0.0",
     "sort-by": "^1.2.0",
+    "swiper": "^11.1.14",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const Create = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('');  // Вернули username
   const [password, setPassword] = useState('');
   const [role, setRole] = useState(''); 
 
@@ -12,13 +12,13 @@ const Create = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
-    setUsername(''); 
+    setUsername('');  // Вернули username
     setPassword('');
     setRole(''); 
   };
 
   const handleCreate = async () => {
-    const partnerData = { username, password, role };
+    const partnerData = { username, password, role };  // Вернули username
 
     try {
       const response = await fetch('http://localhost:5000/api/v1/admin/create-partner', {
@@ -62,8 +62,8 @@ const Create = () => {
               <label className="block mb-2">Имя пользователя:</label>
               <input
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={username}  // Вернули username
+                onChange={(e) => setUsername(e.target.value)}  // Вернули username
                 className="input input-bordered w-full"
                 required
               />

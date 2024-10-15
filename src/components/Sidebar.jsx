@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaBullhorn, FaClipboardList, FaNewspaper, FaHome, FaBoxOpen } from 'react-icons/fa';
+import { FaBullhorn, FaClipboardList, FaNewspaper, FaHome, FaBoxOpen, FaStore, FaCreditCard, FaTruck, FaAddressBook } from 'react-icons/fa';
 
 const Sidebar = ({ theme }) => {
   const location = useLocation();
@@ -28,7 +28,7 @@ const Sidebar = ({ theme }) => {
                   : linkHoverStyle
               }`}
             >
-              <FaHome size={20} /> Home
+              <FaHome size={20} /> Главная страница 
             </Link>
           </li>
           <li>
@@ -40,7 +40,7 @@ const Sidebar = ({ theme }) => {
                   : linkHoverStyle
               }`}
             >
-              <FaBoxOpen size={20} /> Products
+              <FaBoxOpen size={20} /> Продукты 
             </Link>
           </li>
           <li>
@@ -52,7 +52,7 @@ const Sidebar = ({ theme }) => {
                   : linkHoverStyle
               }`}
             >
-              <FaClipboardList size={20} /> Applications
+              <FaClipboardList size={20} /> Заявки
             </Link>
           </li>
           <li>
@@ -64,7 +64,7 @@ const Sidebar = ({ theme }) => {
                   : linkHoverStyle
               }`}
             >
-              <FaNewspaper size={20} /> News
+              <FaNewspaper size={20} /> Новости
             </Link>
           </li>
           <li>
@@ -76,19 +76,67 @@ const Sidebar = ({ theme }) => {
                   : linkHoverStyle
               }`}
             >
-              <FaBullhorn size={20} /> Advertising
+              <FaBullhorn size={20} /> Баннер и Реклама 
             </Link>
           </li>
           <li>
             <Link
               to="/app/otziv" 
               className={`flex items-center gap-4 py-2 px-5 rounded-lg transition-all duration-300 ${
-                location.pathname === "/app/advertising"
+                location.pathname === "/app/otziv"
                   ? linkActiveStyle
                   : linkHoverStyle
               }`}
             >
-              <FaBullhorn size={20} /> Otziv
+              <FaBullhorn size={20} /> Отзыв
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/app/magazin" 
+              className={`flex items-center gap-4 py-2 px-5 rounded-lg transition-all duration-300 ${
+                location.pathname === "/app/magazin"
+                  ? linkActiveStyle
+                  : linkHoverStyle
+              }`}
+            >
+              <FaStore size={20} /> Магазин
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/app/oplata" 
+              className={`flex items-center gap-4 py-2 px-5 rounded-lg transition-all duration-300 ${
+                location.pathname === "/app/oplata"
+                  ? linkActiveStyle
+                  : linkHoverStyle
+              }`}
+            >
+              <FaCreditCard size={20} /> Оплата и заказ 
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/app/dostavka" 
+              className={`flex items-center gap-4 py-2 px-5 rounded-lg transition-all duration-300 ${
+                location.pathname === "/app/dostavka"
+                  ? linkActiveStyle
+                  : linkHoverStyle
+              }`}
+            >
+              <FaTruck size={20} /> Доставка
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/app/contacts" 
+              className={`flex items-center gap-4 py-2 px-5 rounded-lg transition-all duration-300 ${
+                location.pathname === "/app/contacts"
+                  ? linkActiveStyle
+                  : linkHoverStyle
+              }`}
+            >
+              <FaAddressBook size={20} /> Контакты
             </Link>
           </li>
         </ul>

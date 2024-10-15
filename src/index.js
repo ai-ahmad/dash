@@ -16,6 +16,10 @@ import Applications from "./pages/Applications";
 import News from "./pages/News";
 import Advertising from "./pages/Advertising";
 import Otziv from "./pages/Otziv";
+import Magazin from "./pages/Magazin";
+import Oplatazakaz from "./pages/Oplatazakaz";
+import Dostavka from "./pages/Dostavka";
+import Contacts from "./pages/Contacts";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +42,38 @@ const router = createBrowserRouter([
         element: 
         <PrivateRoute >
         <Otziv />
+        </PrivateRoute>,
+      },
+      
+      {
+        path: "magazin", 
+        element: 
+        <PrivateRoute >
+        <Magazin />
+        </PrivateRoute>,
+      },
+      
+      {
+        path: "oplata", 
+        element: 
+        <PrivateRoute >
+        <Oplatazakaz />
+        </PrivateRoute>,
+      },
+      
+      {
+        path: "dostavka", 
+        element: 
+        <PrivateRoute >
+        <Dostavka />
+        </PrivateRoute>,
+      },
+      
+      {
+        path: "contacts", 
+        element: 
+        <PrivateRoute >
+        <Contacts />
         </PrivateRoute>,
       },
       {

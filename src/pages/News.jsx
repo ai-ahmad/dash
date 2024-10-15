@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { FaSpinner } from "react-icons/fa";
-import { useOutletContext } from 'react-router-dom'; 
+import { useOutletContext } from 'react-router-dom';
 
 const News = () => {
-  const { theme } = useOutletContext(); 
+  const { theme } = useOutletContext();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     description1: '',
     description2: '',
-    date: '',
     images: [],
   });
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentEditId, setCurrentEditId] = useState(null);
 
   const dataRequest = async () => {
     try {
@@ -21,7 +22,7 @@ const News = () => {
       const news = await response.json();
       setData(news);
     } catch (error) {
-      console.error('Error fetching news:', error);
+      console.error('Ошибка при загрузке новостей:', error);
     } finally {
       setLoading(false);
     }
@@ -55,33 +56,55 @@ const News = () => {
       newFormData.append('title', formData.title);
       newFormData.append('description1', formData.description1);
       newFormData.append('description2', formData.description2);
-      newFormData.append('date', formData.date);
+      newFormData.append('date', formData.date); // Include the date
+
       formData.images.forEach((file) => {
         newFormData.append('images', file);
       });
 
-      const response = await fetch('http://localhost:5000/api/v1/news/create', {
-        method: 'POST',
+      const url = isEditing ? `http://localhost:5000/api/v1/news/${currentEditId}` : 'http://localhost:5000/api/v1/news/create';
+      const method = isEditing ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
         body: newFormData,
       });
-      if (!response.ok) throw new Error('Error adding news');
-      const newNews = await response.json();
-      setData((prevData) => [...prevData, newNews.news]);
 
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Ошибка при отправке формы');
+      }
+
+      const result = await response.json();
+      if (isEditing) {
+        setData((prevData) => prevData.map((item) => (item._id === currentEditId ? result.news : item)));
+      } else {
+        setData((prevData) => [...prevData, result.news]);
+      }
+
+      setFormData({ title: '', description1: '', description2: '', date: '', images: [] });
+      setIsEditing(false);
+      setCurrentEditId(null);
       document.getElementById('my_modal_news').close();
-      setFormData({
-        title: '',
-        description1: '',
-        description2: '',
-        date: '',
-        images: [],
-      });
     } catch (error) {
-      console.error('Error adding news:', error);
-      alert('Failed to add news. Please try again.');
+      console.error('Ошибка при отправке формы:', error);
+      alert(`Не удалось отправить форму: ${error.message}`);
     } finally {
       setLoading(false);
     }
+  };
+
+
+  const handleEdit = (newsItem) => {
+    setIsEditing(true);
+    setCurrentEditId(newsItem._id);
+    setFormData({
+      title: newsItem.title,
+      description1: newsItem.description1,
+      description2: newsItem.description2,
+      images: [],
+    });
+    document.getElementById('my_modal_news').showModal();
   };
 
   const handleDelete = async (id) => {
@@ -91,13 +114,13 @@ const News = () => {
       });
       if (response.ok) {
         setData((prevData) => prevData.filter((news) => news._id !== id));
-        alert('News deleted successfully');
+        alert('Новость успешно удалена');
       } else {
         const errorData = await response.json();
-        alert(`Failed to delete news: ${errorData.message}`);
+        alert(`Не удалось удалить новость: ${errorData.message}`);
       }
     } catch (error) {
-      console.error('Error deleting news:', error);
+      console.error('Ошибка при удалении новости:', error);
     }
   };
 
@@ -107,51 +130,47 @@ const News = () => {
     padding: '3rem',
     display: 'flex',
     flexDirection: 'column',
-    width: '90%', 
+    width: '90%',
     gap: '1rem',
-  };
-
-  const modalStyle = {
-    background: theme === 'light' ? '#f9f9f9' : '#333333',
-    color: theme === 'light' ? '#000000' : '#ffffff',
   };
 
   return (
     <div style={newsStyle}>
       <div className="bg-base-300 p-5 w-full flex justify-between items-center rounded-2xl">
-        <h1 className="text-3xl font-bold text-primary">News</h1>
-        <button className="btn btn-primary" onClick={() => document.getElementById('my_modal_news').showModal()}>
-          Добавить
+        <h1 className="text-3xl font-bold text-primary">Новости</h1>
+        <button className="btn btn-primary" onClick={() => {
+          setIsEditing(false);
+          setCurrentEditId(null);
+          setFormData({ title: '', description1: '', description2: '', images: [] });
+          document.getElementById('my_modal_news').showModal();
+        }}>
+          {isEditing ? 'Редактировать' : 'Добавить'}
         </button>
       </div>
 
-      <dialog id="my_modal_news" className="modal" style={modalStyle}>
+      <dialog id="my_modal_news" className="modal">
         <div className="modal-box">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">X</button>
           </form>
           <form onSubmit={handleFormSubmit}>
             <label className="input input-bordered flex items-center gap-2 mt-10">
-              Title
-              <input type="text" name="title" value={formData.title} onChange={handleFormChange} className="grow" placeholder="Title" required />
+              Заголовок
+              <input type="text" name="title" value={formData.title} onChange={handleFormChange} className="grow" placeholder="Заголовок" required />
             </label>
             <label className="input input-bordered flex items-center gap-2 mt-5">
-              Image urls
-              <input type="file" name="images" onChange={handleFileChange} className="grow" multiple required />
+              Изображения
+              <input type="file" name="images" onChange={handleFileChange} className="grow" multiple />
             </label>
             <label className="input input-bordered flex items-center gap-2 mt-5">
-              Date
-              <input type="text" name="date" value={formData.date} onChange={handleFormChange} className="grow" required />
+              Описание 1
+              <input name="description1" value={formData.description1} onChange={handleFormChange} className="grow" placeholder="Описание 1" />
             </label>
             <label className="input input-bordered flex items-center gap-2 mt-5">
-              Description 1
-              <input name="description1" value={formData.description1} onChange={handleFormChange} className="grow" placeholder="Description 1" />
+              Описание 2
+              <input name="description2" value={formData.description2} onChange={handleFormChange} className="grow" placeholder="Описание 2" />
             </label>
-            <label className="input input-bordered flex items-center gap-2 mt-5">
-              Description 2
-              <input name="description2" value={formData.description2} onChange={handleFormChange} className="grow" placeholder="Description 2" />
-            </label>
-            <button type="submit" className="btn mt-5">Add News</button>
+            <button type="submit" className="btn mt-5">{isEditing ? 'Обновить новость' : 'Добавить новость'}</button>
           </form>
         </div>
       </dialog>
@@ -162,33 +181,31 @@ const News = () => {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Images</th>
-                <th>Date</th>
-                <th>Description 1</th>
-                <th>Description 2</th>
-                <th>Actions</th>
+                <th>Изображения</th>
+                <th>Описание 1</th>
+                <th>Описание 2</th>
+                <th>Действия</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="7" className="text-center flex justify-center items-center">
+                  <td colSpan="5" className="text-center flex justify-center items-center">
                     <FaSpinner className="animate-spin text-5xl text-gray-50" />
                   </td>
                 </tr>
               ) : (
                 Array.isArray(data) && data.length > 0 ? (
                   data.map((newsItem) => (
-                    <tr key={newsItem._id}>
+                    <tr key={newsItem._id} className='text-white'>
                       <td>{newsItem._id}</td>
                       <td>
                         {newsItem.images && newsItem.images.length > 0 ? (
-                          <img src={`http://localhost:5000${newsItem.images[0]}`} alt={`News Image 1`} className="w-16 h-16 object-cover" />
+                          <img src={`http://localhost:5000${newsItem.images[0]}`} alt="Изображение новости" className="w-16 h-16 object-cover" />
                         ) : (
-                          <span>No Image</span>
+                          <span>Без изображения</span>
                         )}
                       </td>
-                      <td>{newsItem.date}</td>
                       <td>
                         <div className="text-sm leading-relaxed max-w-xs truncate">
                           {newsItem.description1}
@@ -200,14 +217,14 @@ const News = () => {
                         </div>
                       </td>
                       <td>
-                        <button className="btn">Edit</button>
-                        <button className="btn" onClick={() => handleDelete(newsItem._id)}>Delete</button>
+                        <button className="btn hover:bg-yellow-200 transition duration-200" onClick={() => handleEdit(newsItem)}>Редактировать</button>
+                        <button className="btn hover:bg-red-600 transition duration-200" onClick={() => handleDelete(newsItem._id)}>Удалить</button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="text-center">No data available</td>
+                    <td colSpan="5" className="text-center">Нет доступных данных</td>
                   </tr>
                 )
               )}

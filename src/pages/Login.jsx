@@ -20,15 +20,15 @@ const Login = () => {
   const handleLogin = async () => {
     setLoading(true);
     setError('');
-
+  
     try {
-      const response = await axios.post('http://localhost:5000/api/v1/admin/login', {
-        username,
+      const response = await axios.post('http://localhost:5000/api/v1/admin/login/', {
+        name: username, 
         password,
       });
-
+  
       console.log('Ответ сервера:', response.data);
-
+  
       if (response.data.admin) {
         console.log('Авторизация успешна');
         localStorage.setItem('admin', JSON.stringify(response.data.admin));
@@ -44,6 +44,7 @@ const Login = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(/path/to/your/background-image.jpg)' }}>

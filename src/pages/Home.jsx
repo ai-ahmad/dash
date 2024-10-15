@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   Area,
 } from "recharts";
-import { FaBox, FaBullhorn, FaClipboardList, FaSpinner } from "react-icons/fa";
+import { FaBox, FaBullhorn, FaClipboardList, FaSpinner, FaStore } from "react-icons/fa";
 
 const Home = () => {
   const [applications, setApplications] = useState([]);
@@ -18,6 +18,7 @@ const Home = () => {
   const [recentApplications, setRecentApplications] = useState([]);
   const [advertising, setAdvertising] = useState([]);
   const [news, setNews] = useState([]);
+  const [storeData, setStoreData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const requestApplications = async () => {
@@ -71,6 +72,7 @@ const Home = () => {
     }
   };
 
+
   useEffect(() => {
     requestApplications();
     requestProducts();
@@ -99,14 +101,14 @@ const Home = () => {
         </div>
       ) : (
         <>
+          {/* Dashboard Cards */}
           <div className="p-5 w-full flex items-center justify-between flex-wrap gap-4">
-
             <div className="p-4 rounded-2xl bg-gradient-to-r from-red-500 to-pink-600 shadow-lg flex-1 w-1/4 text-right text-white">
               <div className="flex justify-between items-center">
                 <FaBox size={30} />
                 <div>
                   <p className="text-2xl font-bold">{products.length}</p>
-                  <p className="text-sm font-bold text-opacity-80">Products Assortment</p>
+                  <p className="text-sm font-bold text-opacity-80">Ассортимент товаров</p>
                 </div>
               </div>
             </div>
@@ -116,7 +118,7 @@ const Home = () => {
                 <FaBox size={30} />
                 <div>
                   <p className="text-2xl font-bold">{news.length}</p>
-                  <p className="text-sm font-bold text-opacity-80">News</p>
+                  <p className="text-sm font-bold text-opacity-80">Новости</p>
                 </div>
               </div>
             </div>
@@ -126,7 +128,7 @@ const Home = () => {
                 <FaClipboardList size={30} />
                 <div>
                   <p className="text-2xl font-bold">{applications.length}</p>
-                  <p className="text-sm font-bold text-opacity-80">Total Applications</p>
+                  <p className="text-sm font-bold text-opacity-80">Всего заявок</p>
                 </div>
               </div>
             </div>
@@ -136,42 +138,42 @@ const Home = () => {
                 <FaBullhorn size={30} />
                 <div>
                   <p className="text-2xl font-bold">{advertising.length}</p>
-                  <p className="text-sm font-bold text-opacity-80">Active Advertising</p>
+                  <p className="text-sm font-bold text-opacity-80">Активная реклама</p>
                 </div>
               </div>
             </div>
+
           </div>
 
+          {/* Updated Chart Section */}
           <div className="p-5 mt-10 bg-base-200 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Applications Overview</h2>
-            <ResponsiveContainer width="100%" height={300}>
+            <h2 className="text-xl font-bold mb-4">Обзор заявок</h2>
+            <ResponsiveContainer width="100%" height={400}>
               <ComposedChart data={candleData}>
-                <CartesianGrid strokeDasharray="2 2" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Area dataKey="high" fill="#82ca9d" stroke="#82ca9d" />
-                <Area dataKey="low" fill="#ff0000" stroke="#ff0000" />
-                <Bar dataKey="close" fill="#8884d8" name="Total Amount" />
-                <Bar dataKey="orderCount" fill="#82ca9d" name="Order Count" />
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" label={{ value: "Дата", position: "insideBottomRight", offset: -10 }} />
+                <YAxis
+                  label={{ value: "Сумма ($)", angle: -90, position: "insideLeft" }}
+                  tickFormatter={(value) => `$${value.toFixed(0)}`}
+                />
+                <Tooltip
+                  formatter={(value, name) => {
+                    if (name === "Максимальная сумма" || name === "Минимальная сумма" || name === "Общая сумма") {
+                      return `$${value.toFixed(2)}`;
+                    }
+                    return value;
+                  }}
+                />
+                <Legend verticalAlign="top" height={36} />
+
+                <Area type="monotone" dataKey="high" fill="#82ca9d" stroke="#82ca9d" name="Максимальная сумма" />
+                <Area type="monotone" dataKey="low" fill="#ff4d4f" stroke="#ff4d4f" name="Минимальная сумма" />
+                <Bar dataKey="close" fill="#8884d8" name="Общая сумма" />
+                <Bar dataKey="orderCount" fill="#83a6ed" name="Количество заказов" />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Список последних заявок */}
-          <div className="mt-8">
-            <h2 className="text-xl font-bold mb-4">Recent Applications</h2>
-            <ul>
-              {recentApplications.map((app) => (
-                <li key={app._id} className="p-2 border-b border-gray-200 flex justify-between text-gray-800 dark:text-gray-200">
-                  <span>Application #{app.id}</span>
-                  <span>Total: ${app.totalAmount}</span>
-                  <span>{app.date}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
         </>
       )}
     </div>
