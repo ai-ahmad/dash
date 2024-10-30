@@ -2,26 +2,25 @@ import React, { useState } from 'react';
 
 const Create = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [username, setUsername] = useState('');  // Вернули username
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState(''); 
+  const [role, setRole] = useState('');
 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
+  const openModal = () => setModalIsOpen(true);
   const closeModal = () => {
     setModalIsOpen(false);
-    setUsername('');  // Вернули username
+    setUsername('');
     setPassword('');
-    setRole(''); 
-  };
+    setRole('');
+  };  
 
   const handleCreate = async () => {
-    const partnerData = { username, password, role };  // Вернули username
+    const partnerData = { username, password, role };
+
+    console.log("Sending data:", partnerData); // Debugging log
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/admin/create-partner', {
+      const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/admin/create-partnyor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,31 +28,24 @@ const Create = () => {
         body: JSON.stringify(partnerData),
       });
 
-      // Логируем статус и текст ответа
-      console.log('Статус ответа:', response.status);
       const result = await response.json();
-      console.log('Текст ответа:', result);
+      console.log('Response status:', response.status);
+      console.log('Response data:', result);
 
       if (!response.ok) {
-        throw new Error(result.message || 'Ошибка при добавлении партнера');
+        throw new Error(result.message || 'Error adding partner');
       }
 
-      console.log('Партнер успешно добавлен:', result);
+      console.log('Partner successfully added:', result);
       closeModal(); 
     } catch (error) {
-      console.error('Ошибка:', error);
+      console.error('Error:', error);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      <button
-        onClick={openModal}
-        className="btn btn-primary text-white"
-      >
-        Создать
-      </button>
-
+      <button onClick={openModal} className="btn btn-primary text-white">Создать</button>
       {modalIsOpen && (
         <dialog open className="modal">
           <div className="modal-box">
@@ -62,8 +54,8 @@ const Create = () => {
               <label className="block mb-2">Имя пользователя:</label>
               <input
                 type="text"
-                value={username}  // Вернули username
-                onChange={(e) => setUsername(e.target.value)}  // Вернули username
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="input input-bordered w-full"
                 required
               />
@@ -89,18 +81,8 @@ const Create = () => {
               />
             </div>
             <div className="flex justify-end space-x-4 mt-4">
-              <button
-                onClick={handleCreate}
-                className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200 ease-in-out"
-              >
-                Создать
-              </button>
-              <button
-                onClick={closeModal}
-                className="bg-gray-300 text-black font-bold py-2 px-4 rounded hover:bg-gray-400 transition duration-200 ease-in-out"
-              >
-                Закрыть
-              </button>
+              <button onClick={handleCreate} className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200 ease-in-out">Создать</button>
+              <button onClick={closeModal} className="bg-gray-300 text-black font-bold py-2 px-4 rounded hover:bg-gray-400 transition duration-200 ease-in-out">Закрыть</button>
             </div>
           </div>
         </dialog>

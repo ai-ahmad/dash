@@ -14,7 +14,7 @@ const Dostavka = () => {
 
   const dataRequest = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/dastavka/');
+      const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/dastavka/');
       if (!response.ok) throw new Error('Network response was not ok');
       const dostavkaData = await response.json();
       setData(dostavkaData);
@@ -48,7 +48,7 @@ const Dostavka = () => {
     }
 
     try {
-      const url = isEditing ? `http://localhost:5000/api/v1/dastavka/${currentEditId}` : 'http://localhost:5000/api/v1/dastavka/create';
+      const url = isEditing ? `https://admin-dash-oil-trade.onrender.com/api/v1/dastavka/${currentEditId}` : 'https://admin-dash-oil-trade.onrender.com/api/v1/dastavka/create';
       const method = isEditing ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -93,7 +93,7 @@ const Dostavka = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/dastavka/${id}`, {
+      const response = await fetch(`https://admin-dash-oil-trade.onrender.com/api/v1/dastavka/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -169,7 +169,7 @@ const Dostavka = () => {
         <tr key={dostavkaItem._id} className='text-white'>
           <td>{dostavkaItem._id}</td>
           <td>
-            <img src={`http://localhost:5000/${dostavkaItem.images}`} alt={dostavkaItem.name} className="w-[100px] h-[100px] object-cover"/>
+            <img src={`https://admin-dash-oil-trade.onrender.com/${dostavkaItem.images}`} alt={dostavkaItem.name} className="w-[100px] h-[100px] object-cover"/>
           </td>
           <td>{dostavkaItem.name}</td>
           <td>

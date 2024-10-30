@@ -13,7 +13,7 @@ const Magazin = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/v1/about/');
+      const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/about/');
       if (!response.ok) throw new Error('Network response was not ok');
       const magazinData = await response.json();
       setData(magazinData);
@@ -45,8 +45,8 @@ const Magazin = () => {
     
     // Define the URL and method based on whether we're editing or creating
     const url = isEditing
-      ? `http://localhost:5000/api/v1/about/update`
-      : 'http://localhost:5000/api/v1/about/create';
+      ? `https://admin-dash-oil-trade.onrender.com/api/v1/about/update`
+      : 'https://admin-dash-oil-trade.onrender.com/api/v1/about/create';
     const method = isEditing ? 'PUT' : 'POST';
     
     // Add the ID to the formData if editing
@@ -99,7 +99,7 @@ const Magazin = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Вы уверены, что хотите удалить этот элемент?')) {
       try {
-        const response = await fetch('http://localhost:5000/api/v1/about/delete', {
+        const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/about/delete', {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

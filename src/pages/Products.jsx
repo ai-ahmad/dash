@@ -134,7 +134,7 @@ const Products = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/card/create', {
+      const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/card/create', {
         method: 'POST',
         body: formDataToSend,
       });
@@ -157,7 +157,7 @@ const Products = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/card/${id}`, {
+      const response = await fetch(`https://admin-dash-oil-trade.onrender.com/api/v1/card/${id}`, {
         method: 'DELETE',
       });
 
@@ -174,7 +174,7 @@ const Products = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/v1/card');
+        const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/card');
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
@@ -442,15 +442,15 @@ data.forEach(item => {
                   <td>
                   {console.log(product)}  {/* Лог выводится вне JSX */}
     <img
-      src={`http://localhost:5000/${product['image']['main_images']}`} // Ensure the URL is correctly built
+      src={`https://admin-dash-oil-trade.onrender.com/${product['image']['main_images']}`} // Ensure the URL is correctly built
       alt={product.name}
       className="w-16 h-16 object-cover inline-block mr-2 cursor-pointer"
-      onClick={() => openImageModal(`http://localhost:5000/${product['main_images']}`)} // Передаем корректный путь
+      onClick={() => openImageModal(`https://admin-dash-oil-trade.onrender.com/${product['main_images']}`)} // Передаем корректный путь
     />
 </td>
                   <td>
                     {product.product_info_pdf && (
-                      <a href={`http://localhost:5000/${product.product_info_pdf}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`https://admin-dash-oil-trade.onrender.com/${product.product_info_pdf}`} target="_blank" rel="noopener noreferrer">
                         Скачать PDF
                       </a>
                     )}

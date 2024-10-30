@@ -11,7 +11,7 @@ const Applications = () => {
     useEffect(() => {
         const fetchApplications = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/v1/zayavka/');
+                const response = await axios.get('https://admin-dash-oil-trade.onrender.com/api/v1/zayavka/');
                 setApplications(response.data.data || []);
                 localStorage.setItem('applications', JSON.stringify(response.data.data || []));
             } catch (error) {
@@ -30,7 +30,7 @@ const Applications = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/api/v1/zayavka/${id}`);
+            await axios.delete(`https://admin-dash-oil-trade.onrender.com/api/v1/zayavka/${id}`);
             setApplications(applications.filter((app) => app._id !== id));
             console.log('Application successfully deleted');
         } catch (error) {

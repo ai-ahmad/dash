@@ -23,7 +23,7 @@ const Home = () => {
 
   const requestApplications = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/v1/zayavka/");
+      const response = await fetch("https://admin-dash-oil-trade.onrender.com/api/v1/zayavka/");
       const result = await response.json();
       if (Array.isArray(result.data)) {
         setApplications(result.data);
@@ -40,7 +40,7 @@ const Home = () => {
 
   const requestProducts = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/v1/card");
+      const response = await fetch("https://admin-dash-oil-trade.onrender.com/api/v1/card");
       const data = await response.json();
       setProducts(data);
     } catch (e) {
@@ -50,7 +50,7 @@ const Home = () => {
 
   const requestAdvertising = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/v1/banner");
+      const response = await fetch("https://admin-dash-oil-trade.onrender.com/api/v1/banner");
       const ads = await response.json();
       setAdvertising(ads);
     } catch (e) {
@@ -60,7 +60,7 @@ const Home = () => {
 
   const requestNews = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/v1/news/");
+      const response = await fetch("https://admin-dash-oil-trade.onrender.com/api/v1/news/");
       const newsData = await response.json();
       if (Array.isArray(newsData)) {
         setNews(newsData);

@@ -14,7 +14,7 @@ const Contacts = () => {
 
   const dataRequest = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/contact/');
+      const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/contact/');
       if (!response.ok) throw new Error('Network response was not ok');
       const contactsData = await response.json();
       setData(contactsData);
@@ -41,7 +41,7 @@ const Contacts = () => {
     e.preventDefault();
     setLoading(true);
     try {
-        const url = isEditing ? `http://localhost:5000/api/v1/contact/${currentEditId}` : 'http://localhost:5000/api/v1/contact/create';
+        const url = isEditing ? `https://admin-dash-oil-trade.onrender.com/api/v1/contact/${currentEditId}` : 'https://admin-dash-oil-trade.onrender.com/api/v1/contact/create';
         const method = isEditing ? 'PUT' : 'POST';
 
         const formDataToSend = new FormData();
@@ -93,7 +93,7 @@ const Contacts = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/contact/${id}`, {
+      const response = await fetch(`https://admin-dash-oil-trade.onrender.com/api/v1/contact/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -180,7 +180,7 @@ const Contacts = () => {
                       <td>
   {contactItem.images ? (
     <img 
-      src={`http://localhost:5000/${contactItem.images}`} 
+      src={`https://admin-dash-oil-trade.onrender.com/${contactItem.images}`} 
       alt={contactItem.name} 
       className="w-[100px] h-[100px] object-cover" // Используйте object-cover для нормального отображения
     />

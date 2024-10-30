@@ -14,7 +14,7 @@ const Oplatazakaz = () => {
 
   const dataRequest = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/zakaz');
+      const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/zakaz');
       if (!response.ok) throw new Error('Network response was not ok');
       const oplataData = await response.json();
       setData(oplataData);
@@ -57,8 +57,8 @@ const Oplatazakaz = () => {
       formDataToSend.append('description', formData.description);
   
       const url = isEditing
-        ? `http://localhost:5000/api/v1/zakaz/${currentEditId}`
-        : 'http://localhost:5000/api/v1/zakaz/create'; // Ensure this endpoint exists on your server
+        ? `https://admin-dash-oil-trade.onrender.com/api/v1/zakaz/${currentEditId}`
+        : 'https://admin-dash-oil-trade.onrender.com/api/v1/zakaz/create'; // Ensure this endpoint exists on your server
       const method = isEditing ? 'PUT' : 'POST';
   
       const response = await fetch(url, {
@@ -105,7 +105,7 @@ const Oplatazakaz = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/zakaz/${id}`, {
+      const response = await fetch(`https://admin-dash-oil-trade.onrender.com/api/v1/zakaz/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -183,7 +183,7 @@ const Oplatazakaz = () => {
                       <td>{oplataItem._id}</td>
                       <td>
   {oplataItem.images.map((img, index) => (
-    <img key={index} src={`http://localhost:5000/${img}`} alt={`Image ${index}`} className="w-[100px] h-[100px] object-cover"/>
+    <img key={index} src={`https://admin-dash-oil-trade.onrender.com/${img}`} alt={`Image ${index}`} className="w-[100px] h-[100px] object-cover"/>
   ))}
 </td>
 

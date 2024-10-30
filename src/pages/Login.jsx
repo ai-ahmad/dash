@@ -22,12 +22,11 @@ const Login = () => {
     setError('');
   
     try {
-      const response = await axios.post('http://localhost:5000/api/v1/admin/login/', {
-        name: username, 
+      const response = await axios.post('https://admin-dash-oil-trade.onrender.com/api/v1/admin/login/', {
+        username, 
         password,
       });
   
-      console.log('Ответ сервера:', response.data);
   
       if (response.data.admin) {
         console.log('Авторизация успешна');

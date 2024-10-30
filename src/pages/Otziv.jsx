@@ -13,7 +13,7 @@ const Otziv = () => {
 
     const fetchOtzivs = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/v1/otziv');
+            const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/otziv');
             const otzivs = await response.json();
             setData(otzivs);
         } catch (error) {
@@ -39,7 +39,7 @@ const Otziv = () => {
         e.preventDefault();
         
         try {
-            const response = await fetch('http://localhost:5000/api/v1/otziv/create', {
+            const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/otziv/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const Otziv = () => {
 
     const handleDelete = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/v1/otziv/delete`, {
+            const response = await fetch(`https://admin-dash-oil-trade.onrender.com/api/v1/otziv/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ const Advertising = () => {
 
     const dataRequest = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/v1/banner');
+            const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/banner');
             const ads = await response.json();
             setData(ads);
         } catch (error) {
@@ -46,7 +46,7 @@ const Advertising = () => {
         try {
             if (isEditing && currentEditId) {
                 // Update existing advertisement
-                const response = await fetch(`http://localhost:5000/api/v1/banner/${currentEditId}`, {
+                const response = await fetch(`https://admin-dash-oil-trade.onrender.com/api/v1/banner/${currentEditId}`, {
                     method: 'PUT',
                     body: formDataToSend,
                 });
@@ -59,7 +59,7 @@ const Advertising = () => {
                 setData((prevData) => prevData.map(ad => ad._id === currentEditId ? updatedAd : ad));
             } else {
                 // Create new advertisement
-                const response = await fetch('http://localhost:5000/api/v1/banner', {
+                const response = await fetch('https://admin-dash-oil-trade.onrender.com/api/v1/banner', {
                     method: 'POST',
                     body: formDataToSend,
                 });
@@ -100,7 +100,7 @@ const Advertising = () => {
 
     const handleDelete = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/v1/banner/${id}`, {
+            const response = await fetch(`https://admin-dash-oil-trade.onrender.com/api/v1/banner/${id}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {
@@ -177,7 +177,7 @@ const Advertising = () => {
                                 <tr key={ad._id} className='text-white'>
                                     <td>{ad._id}</td>
                                     <td>
-                                        <img src={`http://localhost:5000${ad.image_url}`} alt="Ad" style={{ width: '100px', height: 'auto' }} />
+                                        <img src={`https://admin-dash-oil-trade.onrender.com/${ad.image_url}`} alt="Ad" style={{ width: '100px', height: 'auto' }} />
                                     </td>
                                     <td>{truncateDescription(ad.description)}</td>
                                     <td>
